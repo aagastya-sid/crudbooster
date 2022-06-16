@@ -1,5 +1,5 @@
 <?php 
-namespace crocodicstudio\crudbooster\helpers;
+namespace aagastya\crudbooster\helpers;
 
 class CB extends CRUDBooster  {
 	//This CB class is for alias of CRUDBooster class

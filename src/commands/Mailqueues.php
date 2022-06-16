@@ -1,7 +1,7 @@
-<?php namespace crocodicstudio\crudbooster\commands;
+<?php namespace aagastya\crudbooster\commands;
 
 use Cache;
-use crocodicstudio\crudbooster\helpers\CRUDBooster;
+use aagastya\crudbooster\helpers\CRUDBooster;
 use DB;
 use Illuminate\Console\Command;
 use Request;
