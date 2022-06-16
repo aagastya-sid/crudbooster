@@ -89,7 +89,7 @@ class CrudboosterUpdateCommand extends Command
 #  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/     
 #                                                                                                                       
 			");
-        $this->info('--------- :===: Thanks for choosing CRUDBooster :==: ---------------');
+        $this->info('--------- :===: Checking Requirements :==: ---------------');
         $this->info('====================================================================');
     }
 
@@ -179,9 +179,6 @@ class CrudboosterUpdateCommand extends Command
     private function footer($success = true)
     {
         $this->info('--');
-        $this->info('Homepage : http://www.crudbooster.com');
-        $this->info('Github : https://github.com/crocodic-studio/crudbooster');
-        $this->info('Documentation : https://github.com/crocodic-studio/crudbooster/blob/master/docs/en/index.md');
         $this->info('====================================================================');
         if ($success == true) {
             $this->info('------------------- :===: Completed !! :===: ------------------------');
