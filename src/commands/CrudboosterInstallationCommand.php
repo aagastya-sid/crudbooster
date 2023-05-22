@@ -50,19 +50,24 @@ class CrudboosterInstallationCommand extends Command
             $this->info('Dumping the autoloaded files and reloading all new files...');
             $composer = $this->findComposer();
 
-            $process = (app()->version() >= 7.0)
-                ? new Process([$composer.' dumpautoload'])
-                : new Process($composer.' dumpautoload');
+            //dump autoload if php version < 8.1
+            if (app()->version() < 8.1) {
+                $process = new Process([$composer, 'dump-autoload']);
+                $process->setWorkingDirectory(base_path())->run();
+            }
 
             $process->setWorkingDirectory(base_path())->run();
 
             $this->info('Migrating database...');
 
             $this->call('migrate');
-            $this->call('db:seed', ['--class' => 'CBSeeder']);
+
+            //run seeder
+            $this->call('db:seed', ['--class' => 'Database\Seeders\CBSeeder']);
+
             $this->call('config:clear');
-            if (app()->version() < 5.6) {
-                $this->call('optimize');
+            if (app()->version() < 8.1) {
+                $this->call('optimize:clear');
             }
 
             $this->info('Installing CRUDBooster Is Completed ! Thank You :)');
@@ -77,12 +82,12 @@ class CrudboosterInstallationCommand extends Command
     private function header()
     {
         $this->info("
-#     __________  __  ______  ____                   __           
+#     __________  __  ______  ____                   __
 #    / ____/ __ \/ / / / __ \/ __ )____  ____  _____/ /____  _____
 #   / /   / /_/ / / / / / / / __  / __ \/ __ \/ ___/ __/ _ \/ ___/
-#  / /___/ _, _/ /_/ / /_/ / /_/ / /_/ / /_/ (__  ) /_/  __/ /    
-#  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/     
-#                                                                                                                       
+#  / /___/ _, _/ /_/ / /_/ / /_/ / /_/ / /_/ (__  ) /_/  __/ /
+#  \____/_/ |_|\____/_____/_____/\____/\____/____/\__/\___/_/
+#
 			");
         $this->info('--------- :===: Thanks for choosing CRUDBooster :==: ---------------');
         $this->info('====================================================================');

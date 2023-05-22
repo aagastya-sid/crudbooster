@@ -3,7 +3,7 @@
     "description": "CRUDBooster Is CRUD Generator Based On Laravel Easy To Make An Advanced Backend",
     "type": "library",
     "license": "MIT",
-    "keywords":[
+    "keywords": [
         "laravel",
         "admin-panel",
         "backend",
@@ -20,18 +20,17 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php":"^8.0.2",
-        "barryvdh/laravel-dompdf": "^1.0.2",
-        "doctrine/dbal": "~2.3",
+        "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^v2.0.1",
         "maatwebsite/excel": "^3.1",
-        "intervention/imagecache":"^2.3",
-        "laravel/framework": "^9.11"
+        "intervention/imagecache": "^2.3"
     },
     "autoload": {
         "psr-4": {
-          "aagastya\\crudbooster\\": "src/"
+            "aagastya\\crudbooster\\": "src/",
+            "Database\\Seeders\\": "src/database/seeds"
         }
-      },
+    },
     "extra": {
         "laravel": {
             "providers": [
