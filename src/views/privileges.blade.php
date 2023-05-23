@@ -151,29 +151,38 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <?php $no = 1;?>
-                            @foreach($moduls as $modul)
-                                <?php
-                                $roles = DB::table('cms_privileges_roles')->where('id_cms_moduls', $modul->id)->where('id_cms_privileges', $row->id)->first();
-                                ?>
-                                <tr>
-                                    <td><?php echo $no++;?></td>
-                                    <td>{{$modul->name}}</td>
-                                    <td class='info' align="center"><input type='checkbox' title='Check All Horizontal'
-                                                                           <?=($roles->is_create && $roles->is_read && $roles->is_edit && $roles->is_delete) ? "checked" : ""?> class='select_horizontal'/>
-                                    </td>
-                                    <td class='active' align="center"><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]'
-                                                                             <?=@$roles->is_visible ? "checked" : ""?> value='1'/></td>
-                                    <td class='warning' align="center"><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]'
-                                                                              <?=@$roles->is_create ? "checked" : ""?> value='1'/></td>
-                                    <td class='info' align="center"><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]'
-                                                                           <?=@$roles->is_read ? "checked" : ""?> value='1'/></td>
-                                    <td class='success' align="center"><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]'
-                                                                              <?=@$roles->is_edit ? "checked" : ""?> value='1'/></td>
-                                    <td class='danger' align="center"><input type='checkbox' class='is_delete' name='privileges[<?=$modul->id?>][is_delete]'
-                                                                             <?=@$roles->is_delete ? "checked" : ""?> value='1'/></td>
-                                </tr>
-                            @endforeach
+                            @if(@$row)
+                                @forelse($moduls as $modul)
+                                        <?php
+                                        if (@$row){
+                                            $roles = \Illuminate\Support\Facades\DB::table('cms_privileges_roles')->where('id_cms_moduls', $modul->id)->where('id_cms_privileges', $row->id)->first();
+                                        }
+                                        dump(@$row);
+                                        ?>
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{$modul->name}}</td>
+                                        <td class='info' align="center"><input type='checkbox' title='Check All Horizontal'
+                                                                               <?=($roles->is_create && $roles->is_read && $roles->is_edit && $roles->is_delete) ? "checked" : ""?> class='select_horizontal'/>
+                                        </td>
+                                        <td class='active' align="center"><input type='checkbox' class='is_visible' name='privileges[<?=$modul->id?>][is_visible]'
+                                                                                 <?=@$roles->is_visible ? "checked" : ""?> value='1'/></td>
+                                        <td class='warning' align="center"><input type='checkbox' class='is_create' name='privileges[<?=$modul->id?>][is_create]'
+                                                                                  <?=@$roles->is_create ? "checked" : ""?> value='1'/></td>
+                                        <td class='info' align="center"><input type='checkbox' class='is_read' name='privileges[<?=$modul->id?>][is_read]'
+                                                                               <?=@$roles->is_read ? "checked" : ""?> value='1'/></td>
+                                        <td class='success' align="center"><input type='checkbox' class='is_edit' name='privileges[<?=$modul->id?>][is_edit]'
+                                                                                  <?=@$roles->is_edit ? "checked" : ""?> value='1'/></td>
+                                        <td class='danger' align="center"><input type='checkbox' class='is_delete' name='privileges[<?=$modul->id?>][is_delete]'
+                                                                                 <?=@$roles->is_delete ? "checked" : ""?> value='1'/></td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan='8'>{{cbLang('privileges_module_list_empty')}}</td>
+                                    </tr>
+                                @endforelse
+                            @endif
+
                             </tbody>
                         </table>
 

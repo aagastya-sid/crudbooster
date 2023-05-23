@@ -7,7 +7,7 @@
     <meta name='generator' content='CRUDBooster {{ \aagastya\crudbooster\commands\CrudboosterVersionCommand::$version }}'/>
     <meta name='robots' content='noindex,nofollow'/>
     <link rel="shortcut icon"
-          href="{{ CRUDBooster::getSetting('favicon')?asset(CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
+          href="{{ \aagastya\crudbooster\helpers\CRUDBooster::getSetting('favicon')?asset(\aagastya\crudbooster\helpers\CRUDBooster::getSetting('favicon')):asset('vendor/crudbooster/assets/logo_crudbooster.png') }}">
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- Bootstrap 3.4.1 -->
     <link href="{{ asset("vendor/crudbooster/assets/adminlte/bootstrap/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css"/>
@@ -29,11 +29,9 @@
 
     <!-- load css -->
     <style type="text/css">
-        @if($style_css)
-            {!! $style_css !!}
-        @endif
+            {!! @$style_css !!}
     </style>
-    @if($load_css)
+    @if(@$load_css)
         @foreach($load_css as $css)
             <link href="{{$css}}" rel="stylesheet" type="text/css"/>
         @endforeach
@@ -86,7 +84,7 @@
 
     @stack('head')
 </head>
-<body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo ' '; echo config('crudbooster.ADMIN_LAYOUT'); @endphp {{($sidebar_mode)?:''}}">
+<body class="@php echo (Session::get('theme_color'))?:'skin-blue'; echo ' '; echo config('crudbooster.ADMIN_LAYOUT'); @endphp {{( @$sidebar_mode)?:''}}">
 <div id='app' class="wrapper">
 
     <!-- Header -->
@@ -100,25 +98,25 @@
 
         <section class="content-header">
             <?php
-            $module = CRUDBooster::getCurrentModule();
+            $module = \aagastya\crudbooster\helpers\CRUDBooster::getCurrentModule();
             ?>
             @if($module)
                 <h1>
                     <!--Now you can define $page_icon alongside $page_tite for custom forms to follow CRUDBooster theme style -->
-                    <i class='{!! ($page_icon)?:$module->icon !!}'></i> {!! ucwords(($page_title)?:$module->name) !!} &nbsp;&nbsp;
+                    <i class='{!! (@$page_icon)?:$module->icon !!}'></i> {!! ucwords(($page_title)?:$module->name) !!} &nbsp;&nbsp;
 
                     <!--START BUTTON -->
 
-                    @if(CRUDBooster::getCurrentMethod() == 'getIndex')
+                    @if(\aagastya\crudbooster\helpers\CRUDBooster::getCurrentMethod() == 'getIndex')
                         @if($button_show)
-                            <a href="{{ CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}" id='btn_show_data' class="btn btn-sm btn-primary"
+                            <a href="{{ \aagastya\crudbooster\helpers\CRUDBooster::mainpath().'?'.http_build_query(Request::all()) }}" id='btn_show_data' class="btn btn-sm btn-primary"
                                title="{{cbLang('action_show_data')}}">
                                 <i class="fa fa-table"></i> {{cbLang('action_show_data')}}
                             </a>
                         @endif
 
-                        @if($button_add && CRUDBooster::isCreate())
-                            <a href="{{ CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}"
+                        @if($button_add && \aagastya\crudbooster\helpers\CRUDBooster::isCreate())
+                            <a href="{{ \aagastya\crudbooster\helpers\CRUDBooster::mainpath('add').'?return_url='.urlencode(Request::fullUrl()).'&parent_id='.g('parent_id').'&parent_field='.$parent_field }}"
                                id='btn_add_new_data' class="btn btn-sm btn-success" title="{{cbLang('action_add_data')}}">
                                 <i class="fa fa-plus-circle"></i> {{cbLang('action_add_data')}}
                             </a>
@@ -126,15 +124,15 @@
                     @endif
 
 
-                    @if($button_export && CRUDBooster::getCurrentMethod() == 'getIndex')
+                    @if($button_export && \aagastya\crudbooster\helpers\CRUDBooster::getCurrentMethod() == 'getIndex')
                         <a href="javascript:void(0)" id='btn_export_data' data-url-parameter='{{$build_query}}' title='Export Data'
                            class="btn btn-sm btn-primary btn-export-data">
                             <i class="fa fa-upload"></i> {{cbLang("button_export")}}
                         </a>
                     @endif
 
-                    @if($button_import && CRUDBooster::getCurrentMethod() == 'getIndex')
-                        <a href="{{ CRUDBooster::mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data'
+                    @if($button_import && \aagastya\crudbooster\helpers\CRUDBooster::getCurrentMethod() == 'getIndex')
+                        <a href="{{ \aagastya\crudbooster\helpers\CRUDBooster::mainpath('import-data') }}" id='btn_import_data' data-url-parameter='{{$build_query}}' title='Import Data'
                            class="btn btn-sm btn-primary btn-import-data">
                             <i class="fa fa-download"></i> {{cbLang("button_import")}}
                         </a>
@@ -160,7 +158,7 @@
 
 
                 <ol class="breadcrumb">
-                    <li><a href="{{CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbLang('home') }}</a></li>
+                    <li><a href="{{\aagastya\crudbooster\helpers\CRUDBooster::adminPath()}}"><i class="fa fa-dashboard"></i> {{ cbLang('home') }}</a></li>
                     <li class="active">{{$module->name}}</li>
                 </ol>
             @else
@@ -207,14 +205,14 @@
 @include('crudbooster::admin_template_plugins')
 
 <!-- load js -->
-@if($load_js)
+@if(@$load_js)
     @foreach($load_js as $js)
         <script src="{{$js}}"></script>
     @endforeach
 @endif
 <script type="text/javascript">
     var site_url = "{{url('/')}}";
-    @if($script_js)
+    @if(@$script_js)
         {!! $script_js !!}
     @endif
 </script>

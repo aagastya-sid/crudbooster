@@ -3,7 +3,7 @@
 namespace aagastya\crudbooster\helpers;
 
 use Cache;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Image;
 use Request;
 use Route;
@@ -420,26 +420,31 @@ class CRUDBooster
 
         $menu = DB::table('cms_menus')->whereRaw("cms_menus.id IN (select id_cms_menus from cms_menus_privileges where id_cms_privileges = '".self::myPrivilegeId()."')")->where('is_dashboard', 1)->where('is_active', 1)->first();
 
-        switch ($menu->type) {
-            case 'Route':
-                $url = route($menu->path);
-                break;
-            default:
-            case 'URL':
-                $url = $menu->path;
-                break;
-            case 'Controller & Method':
-                $url = action($menu->path);
-                break;
-            case 'Module':
-            case 'Statistic':
-                $url = self::adminPath($menu->path);
-                break;
+        if ($menu) {
+            switch ($menu->type) {
+                case 'Route':
+                    $url = route($menu->path);
+                    break;
+                default:
+                case 'URL':
+                    $url = $menu->path;
+                    break;
+                case 'Controller & Method':
+                    $url = action($menu->path);
+                    break;
+                case 'Module':
+                case 'Statistic':
+                    $url = self::adminPath($menu->path);
+                    break;
+            }
+
+            @$menu->url = $url;
+
+            return $menu;
         }
 
-        @$menu->url = $url;
 
-        return $menu;
+
     }
 
     public static function sidebarMenu()
@@ -948,11 +953,16 @@ class CRUDBooster
             return 'id';
         }
 
-        $pk = DB::getDoctrineSchemaManager()->listTableDetails($table)->getPrimaryKey();
+        //get primary key from table name
+        $pk = DB::select("SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'");
+
+//        dd($pk[0]->Column_name);
+
+
         if(!$pk) {
             return null;
         }
-        return $pk->getColumns()[0];
+        return $pk[0]->Column_name;
     }
 
     public static function newId($table)
